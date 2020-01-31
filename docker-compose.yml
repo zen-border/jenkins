@@ -1,0 +1,22 @@
+version: "3.6"
+services:
+  nginx:
+    build: nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - jenkins
+      - gitbucket
+  gitbucket:
+    image: gitbucket/gitbucket:4
+    volumes:
+      - ./gitbucket:/gitbucket
+    environment:
+      - GITBUCKET_PREFIX=/gitbucket
+    restart: always
+  jenkins:
+    image: jenkins/jenkins:lts
+    environment:
+      - JENKINS_OPTS='--prefix=/jenkins'
+    volumes:
+      - ./jenkins:/var/jenkins_home
